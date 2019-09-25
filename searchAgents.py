@@ -260,7 +260,7 @@ def euclideanHeuristic(position, problem, info={}):
 
 def randomHeuristic(position, problem, info={}):
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    return random.randint(0,10)
 
 #####################################################
 # This portion is incomplete.  Time to write code!  #
