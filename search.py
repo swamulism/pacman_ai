@@ -88,10 +88,9 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     q = util.Stack()
-    curState = problem.getStartState()
-    q.push((curState, []))
+    q.push((problem.getStartState(), []))
     visited = set(curState)
-    while(not q.isEmpty()):
+    while not q.isEmpty():
         (curState, path) = q.pop()
         if problem.isGoalState(curState):
             return path
@@ -106,10 +105,9 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     q = util.Queue()
-    curState = problem.getStartState()
-    q.push((curState, []))
+    q.push((problem.getStartState(), []))
     visited = set(curState)
-    while(not q.isEmpty()):
+    while not q.isEmpty():
         (curState, path) = q.pop()
         if problem.isGoalState(curState):
             return path
@@ -122,19 +120,20 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    q = util.PriorityQueue()
-    curState = problem.getStartState()
-    q.push((curState, [], 0), 0)
-    visited = set(curState)
-    while(not q.isEmpty()):
-        (curState, path, cost) = q.pop()
-        if problem.isGoalState(curState):
-            return path
-        for successor in problem.getSuccessors(curState):
-            if successor[0] not in visited:
-                visited.add(successor[0])
-                q.push((successor[0], path + [successor[1]], cost + successor[2]), cost + successor[2])
-                print(cost+successor[2])
+    # q = util.PriorityQueue()
+    # q.push((problem.getStartState(), [], 0), 0)
+    # visited = set(curState)
+    # while(not q.isEmpty()):
+    #     (curState, path, cost) = q.pop()
+    #     if problem.isGoalState(curState):
+    #         return path
+    #     for successor in problem.getSuccessors(curState):
+    #         if successor[0] not in visited:
+    #             visited.add(successor[0])
+    #             q.push((successor[0], path + [successor[1]], cost + successor[2]), cost + successor[2])
+    #             print(cost+successor[2])
+    util.raiseNotDefined()
+
 
 
 def nullHeuristic(state, problem=None):
@@ -147,41 +146,22 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    # q = util.PriorityQueue()
-    # curState = (problem.getStartState(), None)
-    # # cost = heuristic(curState[0], problem)
-    # q.push((curState, []), 0)
-    # visited = [curState[0]]
-    # while(not q.isEmpty()):
-    #     (curState, path) = q.pop()
-    #     cost = heuristic(curState[0], problem)
-    #     if problem.isGoalState(curState[0]):
-    #         return path
-    #     successors = problem.getSuccessors(curState[0])        
-    #     for successor in successors:
-    #         if successor[0] not in visited:
-    #             visited.append(successor[0])
-    #             q.push((successor, path + [successor[1]]), len(path) + 1 + cost)
-    util.raiseNotDefined()
-
-def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***""create a priotity queue and push a node and heuristic"
-    # fringe = util.PriorityQueue()
-    # fringe.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
-    # visited = []
-    # "pop node wile fringe is not empty"
-    # while not fringe.isEmpty():
-    #     currentLocation, actions = fringe.pop()
-    #     "only process the node never visited yet"
-    #     if currentLocation in visited:
-    #         continuevisited.append(currentLocation)
-    #         "return actions of path if reach goal state"
-    #         if problem.isGoalState(currentLocation):
-    #             return actions
-    #             "get the new location and collect the information then enqueue the node if not visited"
-    #             for newLocation, nextAction, cost in problem.getSuccessors(currentLocation):
-    #                 if not newLocation in visited:newActions = actions + [nextAction]score = problem.getCostOfActions(newActions) + heuristic(newLocation, problem)fringe.push((newLocation, newActions), score)util.raiseNotDefined()# Abbreviationsbfs = breadthFirstSearchdfs = depthFirstSearchastar = aStarSearchucs = uniformCostSearch
+    q = util.PriorityQueue()
+    q.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
+    visited = set()
+    while not q.isEmpty():
+        currentLocation, actions = q.pop()
+        "only process the node never visited yet"
+        if currentLocation in visited:
+            continuevisited.append(currentLocation)
+            "return actions of path if reach goal state"
+        if problem.isGoalState(currentLocation):
+            return actions
+            "get the new location and collect the information then enqueue the node if not visited"
+        for newLocation, nextAction, cost in problem.getSuccessors(currentLocation):
+            if not newLocation in visited:
+                newActions = actions + [nextAction]
+                score = problem.getCostOfActions(newActions) + heuristic(newLocation, problem)fringe.push((newLocation, newActions), score)
 
 
 
