@@ -73,6 +73,19 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 
+def genericSearch(problem, q):
+    visited = set()
+    q.push((problem.getStartState(), []))
+    while not q.isEmpty(): 
+        curState, path = q.pop() 
+        if curState not in visited:
+            if problem.isGoalState(curState):
+                return path
+            visited.add(curState)
+            for successor in problem.getSuccessors(curState):
+                q.push((successor[0], path + [successor[1]]))
+
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,53 +100,20 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    q = util.Stack()
-    q.push((problem.getStartState(), []))
-    visited = set(curState)
-    while not q.isEmpty():
-        (curState, path) = q.pop()
-        if problem.isGoalState(curState):
-            return path
-        if curState not in visited:
-            visited.add(curState)
-        for successor in problem.getSuccessors(curState):
-            if successor[0] not in visited:
-                q.push((successor[0], path + [successor[1]]))
+    return genericSearch(problem, util.Stack())
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    q = util.Queue()
-    q.push((problem.getStartState(), []))
-    visited = set(curState)
-    while not q.isEmpty():
-        (curState, path) = q.pop()
-        if problem.isGoalState(curState):
-            return path
-        for successor in problem.getSuccessors(curState):
-            if successor[0] not in visited:
-                visited.add(successor[0])
-                q.push((successor[0], path + [successor[1]]))
+    return genericSearch(problem, util.Queue())
+
 
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    # q = util.PriorityQueue()
-    # q.push((problem.getStartState(), [], 0), 0)
-    # visited = set(curState)
-    # while(not q.isEmpty()):
-    #     (curState, path, cost) = q.pop()
-    #     if problem.isGoalState(curState):
-    #         return path
-    #     for successor in problem.getSuccessors(curState):
-    #         if successor[0] not in visited:
-    #             visited.add(successor[0])
-    #             q.push((successor[0], path + [successor[1]], cost + successor[2]), cost + successor[2])
-    #             print(cost+successor[2])
-    util.raiseNotDefined()
-
+    return aStarSearch(problem)
 
 
 def nullHeuristic(state, problem=None):
@@ -147,21 +127,18 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     q = util.PriorityQueue()
-    q.push((problem.getStartState(), []), heuristic(problem.getStartState(), problem))
     visited = set()
-    while not q.isEmpty():
-        currentLocation, actions = q.pop()
-        "only process the node never visited yet"
-        if currentLocation in visited:
-            continuevisited.append(currentLocation)
-            "return actions of path if reach goal state"
-        if problem.isGoalState(currentLocation):
-            return actions
-            "get the new location and collect the information then enqueue the node if not visited"
-        for newLocation, nextAction, cost in problem.getSuccessors(currentLocation):
-            if not newLocation in visited:
-                newActions = actions + [nextAction]
-                score = problem.getCostOfActions(newActions) + heuristic(newLocation, problem)fringe.push((newLocation, newActions), score)
+    curState = problem.getStartState()
+    q.push((curState, []), heuristic(curState, problem))
+    while not q.isEmpty(): 
+        curState, path = q.pop() 
+        if curState not in visited:
+            if problem.isGoalState(curState):
+                return path
+            visited.add(curState)
+            for successor in problem.getSuccessors(curState):
+                cost = problem.getCostOfActions(path) + heuristic(successor[0], problem)
+                q.push((successor[0], path + [successor[1]]), cost)
 
 
 
