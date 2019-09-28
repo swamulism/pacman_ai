@@ -137,9 +137,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 return path
             visited.add(curState)
             for successor in problem.getSuccessors(curState):
-                cost = problem.getCostOfActions(path) + heuristic(successor[0], problem)
-                q.push((successor[0], path + [successor[1]]), cost)
-
+                newPath = path + [successor[1]]
+                cost = problem.getCostOfActions(newPath) + heuristic(successor[0], problem)
+                q.push((successor[0], newPath), cost)    
 
 
 
